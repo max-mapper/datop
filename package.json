@@ -1,0 +1,15 @@
+{
+  "name": "datop",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "blessed": "0.0.37",
+    "drawille": "^0.1.1"
+  }
+}
