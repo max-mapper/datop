@@ -1,8 +1,9 @@
-var graph = require('./graph')
+var createScreen = require('./screen.js')
 
-module.exports = function(theme, cpuPlugin) {
-  var g1 = graph(theme, cpuPlugin)
+module.exports = function(theme) {
+  var screen = createScreen(theme)
+  var chart = screen.createChart()
   setInterval(function() {
-    g1.write(Math.floor(Math.random() * 100))
+    chart.write(Math.floor(Math.random() * 100))
   }, 250)
 }
