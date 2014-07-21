@@ -1,0 +1,34 @@
+{
+  "name": "Wizard",
+  "author": "James Hall",
+  "title": {
+    "fg": "#f43059"
+  },
+  "chart": {
+    "fg": "#f43059",
+    "border": {
+      "type": "line",
+      "fg": "white"
+    }
+  },
+  "table": {
+    "fg": "white",
+    "items": {
+      "selected": {
+        "bg": "#f43059",
+        "fg": "#000000"
+      },
+      "item": {
+        "fg": "#ffffff",
+        "bg": "#000000"
+      }
+    },
+    "border": {
+      "type": "line",
+      "fg": "white"
+    }
+  },
+  "footer": {
+    "fg": "white"
+  }
+}
