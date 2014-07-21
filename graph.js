@@ -1,6 +1,7 @@
 var canvas = require('drawille')
 var blessed = require('blessed')
 var os = require('os')
+var through = require('through2')
 var child_process = require('child_process')
 
 module.exports = function(theme, plugin) {
@@ -25,7 +26,7 @@ module.exports = function(theme, plugin) {
   var processList
   var processListSelection
   
-  init()
+  return init()
   
   function init() {
     screen = blessed.screen()
@@ -34,7 +35,7 @@ module.exports = function(theme, plugin) {
       top: 1,
       left: 'left',
       width: '100%',
-      height: '100%',
+      height: '99%',
       content: '',
       fg: theme.chart.fg,
       tags: true,
@@ -46,14 +47,27 @@ module.exports = function(theme, plugin) {
     
     graph.setLabel('GRAPH!!!')
     var chart = createChart()
+    
+    var stream = through.obj(
+      function write(obj, enc, next) {
+        chart.ready = true
+        chart.value = obj
+        next()
+      },
+      function end() {
+        chart.ready = false
+      }
+    )
+    
     setInterval(draw, 100)
-    setInterval(chart.plugin.poll, chart.plugin.interval)
     
     function draw() {
       position++
       graph.setContent(drawChart(chart))
       screen.render()
     }
+    
+    return stream
   }
   
   function createChart() {
@@ -66,11 +80,10 @@ module.exports = function(theme, plugin) {
     var chart = {
       chart: currentCanvas,
       values: values,
-      plugin: plugin,
       width: width,
-      height: height
+      height: height,
+      ready: false
     }
-    chart.plugin.poll()
     return chart
   }
   
@@ -78,13 +91,13 @@ module.exports = function(theme, plugin) {
     var c = chart.chart
     c.clear()
 
-    if (!chart.plugin.initialized) {
+    if (!chart.ready) {
       return false
     }
 
     var dataPointsToKeep = 5000
 
-    chart.values[position] = chart.plugin.currentValue
+    chart.values[position] = chart.value
 
     var computeValue = function(input) {
       return chart.height - Math.floor(((chart.height + 1) / 100) * input) - 1
@@ -110,8 +123,8 @@ module.exports = function(theme, plugin) {
   
     // Add percentage to top right of the chart by splicing it into the braille data
     var textOutput = c.frame().split("\n")
-    var percent = '   ' + chart.plugin.currentValue
-    textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 4) + '{white-fg}' + percent.slice(-3) + '%{/white-fg}'
+    var percent = '   ' + chart.value
+    textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 4) + '{black-fg}' + percent.slice(-3) + '%{/black-fg}'
 
     return textOutput.join("\n")
   }

@@ -1,34 +1,35 @@
 {
-  "name": "Wizard",
+  "name": "Becca",
   "author": "James Hall",
+  "description": "In memory of Becca #663399. This is as close as we can get to that color in xterm",
   "title": {
-    "fg": "#f43059"
+    "fg": "#800080"
   },
   "chart": {
-    "fg": "#f43059",
+    "fg": "#800080",
     "border": {
       "type": "line",
-      "fg": "white"
+      "fg": "#800080"
     }
   },
   "table": {
     "fg": "white",
     "items": {
       "selected": {
-        "bg": "#f43059",
-        "fg": "#000000"
+        "bg": "#800080",
+        "fg": "bg"
       },
       "item": {
-        "fg": "#ffffff",
-        "bg": "#000000"
+        "fg": "fg",
+        "bg": "bg"
       }
     },
     "border": {
       "type": "line",
-      "fg": "white"
+      "fg": "#800080"
     }
   },
   "footer": {
-    "fg": "white"
+    "fg": "fg"
   }
 }
