@@ -1,11 +1,18 @@
-var canvas = require('drawille')
+var Drawille = require('drawille')
 var blessed = require('blessed')
-var os = require('os')
 var through = require('through2')
-var child_process = require('child_process')
 
-module.exports = function(theme, plugin) {
+module.exports = function(theme) {
   var program = blessed.program()
+  
+  process.on('SIGINT', function() {
+    program.clear()
+    program.disableMouse()
+    program.showCursor()
+    program.normalBuffer()
+    process.exit(0)
+  })
+  
   var screen
   var charts = {}
   var intervals = []
@@ -45,7 +52,7 @@ module.exports = function(theme, plugin) {
     screen.append(graph)
     screen.render()
     
-    graph.setLabel('GRAPH!!!')
+    graph.setLabel('datop')
     var chart = createChart()
     
     var stream = through.obj(
@@ -75,10 +82,10 @@ module.exports = function(theme, plugin) {
     size.pixel.height = (graph.height - 2) * 4
     var width = (graph.width - 3) * 2
     var height = (graph.height - 2) * 4
-    var currentCanvas = new canvas(width, height)
+    var canvas = new Drawille(width, height)
     var values = []
     var chart = {
-      chart: currentCanvas,
+      chart: canvas,
       values: values,
       width: width,
       height: height,

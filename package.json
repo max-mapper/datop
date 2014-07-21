@@ -1,15 +1,28 @@
 {
   "name": "datop",
   "version": "0.0.0",
-  "description": "",
+  "bin": {
+    "datop": "cli.js"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "description": "cli dashboard for dat",
+  "author": "max ogden",
   "license": "BSD",
   "dependencies": {
     "blessed": "0.0.37",
-    "drawille": "^0.1.1"
-  }
+    "drawille": "^0.1.1",
+    "through2": "^0.5.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxogden/datop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxogden/datop/issues"
+  },
+  "homepage": "https://github.com/maxogden/datop"
 }
