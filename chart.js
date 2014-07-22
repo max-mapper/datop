@@ -27,21 +27,31 @@ module.exports.draw = function(chart, position) {
     return false
   }
   
-  var dataPointsToKeep = 5000
+  var dataPointsToKeep = 1000
 
   chart.values[position] = chart.value
 
   if (position > dataPointsToKeep) {
     delete chart.values[position - dataPointsToKeep]
   }
-
-  for (var pos in chart.values) {
-    var p = parseInt(pos, 10) + (chart.width - chart.values.length)
-    var rawval = chart.values[pos]
-    var pval = computeValue(chart.values[pos])
+  
+  // do first pass to determine min/max
+  chart.min = 0
+  chart.max = 0
+  for (var i = 0; i < chart.width; i++) {
+    var rawval = chart.values[chart.values.length - i]
     if (rawval > 0) {
       if (rawval < chart.min) chart.min = rawval
       if (rawval > chart.max) chart.max = rawval
+    }
+  }
+
+  for (var pos in chart.values) {
+    var p = parseInt(pos, 10) + (chart.width - chart.values.length)
+    var pval = computeValue(chart.values[pos])
+    
+    if (p > 0 && pval > 0) {
+      c.set(p, chart.height - 1)
     }
     
     for (var y = 0; y < pval; y++) {
