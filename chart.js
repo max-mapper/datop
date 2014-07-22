@@ -1,9 +1,9 @@
 var Drawille = require('drawille')
 var prettybytes = require('pretty-bytes')
 
-module.exports.create = function(graph) {
-  var width = (graph.width - 3) * 2
-  var height = (graph.height - 2) * 4
+module.exports.create = function(box) {
+  var width = (box.width - 3) * 2
+  var height = (box.height - 2) * 4
   var canvas = new Drawille(width, height)
   var values = []
   var chart = {
@@ -17,6 +17,14 @@ module.exports.create = function(graph) {
   }
   
   return chart
+}
+
+module.exports.resize = function(chart, box) {
+  var width = (box.width - 3) * 2
+  var height = (box.height - 2) * 4
+  chart.chart = new Drawille(width, height)
+  chart.width = width
+  chart.height = height
 }
 
 module.exports.draw = function(chart, position) {
@@ -68,7 +76,6 @@ module.exports.draw = function(chart, position) {
   
   function computeValue(input) {
     return ~~scale(input, chart.min, chart.max, 0, chart.height)
-    // return chart.height - Math.floor(((chart.height + 1) / 100) * input) - 1
   }
 }
 

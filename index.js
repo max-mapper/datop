@@ -6,27 +6,27 @@ var through = require('through2')
 module.exports = function(theme) {
   var screen = createScreen(theme)
   var httpRead = screen.createChart({
-    height: "49%",
+    height: "48%",
     width: "50%",
     title: "HTTP Read"
   })
   var httpWritten = screen.createChart({
     height: "49%",
     width: "50%",
-    top: httpRead.box.height + 1,
+    top: '52%',
     title: "HTTP Written"
   })
   var levelRead = screen.createChart({
-    height: "49%",
-    left: httpWritten.box.width + 2,
+    height: "48%",
+    left: "51%",
     width: '49%',
     title: "Level Read"
   })
   var levelWritten = screen.createChart({
     height: "49%",
     width: '49%',
-    left: httpRead.box.width + 2,
-    top: levelRead.box.height + 1,
+    left: '51%',
+    top: '52%',
     title: "Level Written"
   })
   var req = request('http://localhost:6461/api/stats')

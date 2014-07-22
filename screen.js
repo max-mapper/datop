@@ -8,7 +8,8 @@ module.exports = Screen
 function Screen(theme) {
   if (!(this instanceof Screen)) return new Screen(theme)
   var self = this
-  var program = blessed.program()
+  var program = blessed.program({log: "datop.log"})
+  process.program = program
   
   process.on('SIGINT', function() {
     program.clear()
@@ -20,6 +21,13 @@ function Screen(theme) {
   
   this.program = program
   this.screen = blessed.screen()
+  
+  this.screen.on('resize', function() {
+    for (var i = 0; i < self.renderList.length; i++) {
+      var item = self.renderList[i]
+      if (item.chart) dataChart.resize(item.chart, item.box)
+    }
+  })
   
   this.theme = theme
   this.renderList = []
