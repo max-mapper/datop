@@ -1,4 +1,5 @@
 var Drawille = require('drawille')
+var prettybytes = require('pretty-bytes')
 
 module.exports.create = function(graph) {
   var width = (graph.width - 3) * 2
@@ -10,7 +11,9 @@ module.exports.create = function(graph) {
     values: values,
     width: width,
     height: height,
-    ready: false
+    ready: false,
+    min: 0,
+    max: 0
   }
   
   return chart
@@ -23,7 +26,7 @@ module.exports.draw = function(chart, position) {
   if (!chart.ready) {
     return false
   }
-
+  
   var dataPointsToKeep = 5000
 
   chart.values[position] = chart.value
@@ -34,26 +37,31 @@ module.exports.draw = function(chart, position) {
 
   for (var pos in chart.values) {
     var p = parseInt(pos, 10) + (chart.width - chart.values.length)
-
-    if (p > 0 && computeValue(chart.values[pos]) > 0) {
-      c.set(p, computeValue(chart.values[pos]))
+    var rawval = chart.values[pos]
+    var pval = computeValue(chart.values[pos])
+    if (rawval > 0) {
+      if (rawval < chart.min) chart.min = rawval
+      if (rawval > chart.max) chart.max = rawval
     }
-
-    for (var y = computeValue(chart.values[pos]); y < chart.height; y ++) {
-      if (p > 0 && y > 0) {
-        c.set(p, y)
-      }
+    
+    for (var y = 0; y < pval; y++) {
+      c.set(p, chart.height - y)
     }
   }
 
   // Add percentage to top right of the chart by splicing it into the braille data
   var textOutput = c.frame().split("\n")
   var percent = '   ' + chart.value
-  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 4) + '{black-fg}' + percent.slice(-3) + '%{/black-fg}'
+  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 10) + '{black-fg}' + prettybytes(chart.max) + '{/black-fg}'
 
   return textOutput.join("\n")
   
   function computeValue(input) {
-    return chart.height - Math.floor(((chart.height + 1) / 100) * input) - 1
+    return ~~scale(input, chart.min, chart.max, 0, chart.height)
+    // return chart.height - Math.floor(((chart.height + 1) / 100) * input) - 1
   }
+}
+
+function scale( x, fromLow, fromHigh, toLow, toHigh ) {
+  return ( x - fromLow ) * ( toHigh - toLow ) / ( fromHigh - fromLow ) + toLow
 }

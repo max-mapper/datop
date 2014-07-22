@@ -20,6 +20,7 @@ function Screen(theme) {
   
   this.program = program
   this.screen = blessed.screen()
+  
   this.theme = theme
   this.renderList = []
   
@@ -27,7 +28,10 @@ function Screen(theme) {
   
   function draw() {
     if (self.renderList.length === 0) return
-    for (var i = 0; i < self.renderList.length; i++) self.renderList[i].render()
+    for (var i = 0; i < self.renderList.length; i++) {
+      var item = self.renderList[i]
+      item.render()
+    }
     self.screen.render()
   }
 }
