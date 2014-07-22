@@ -5,10 +5,10 @@ var dataChart = require('./chart.js')
 
 module.exports = Screen
 
-function Screen(theme) {
-  if (!(this instanceof Screen)) return new Screen(theme)
+function Screen(host, theme) {
+  if (!(this instanceof Screen)) return new Screen(host, theme)
   var self = this
-  var program = blessed.program({log: "datop.log"})
+  var program = blessed.program()
   process.program = program
   
   process.on('SIGINT', function() {
@@ -21,6 +21,19 @@ function Screen(theme) {
   
   this.program = program
   this.screen = blessed.screen()
+  
+  var headerText = ' {bold}datop{/bold} - ' + host
+  var header = blessed.text({
+    top: 'top',
+    left: 'left',
+    width: headerText.length,
+    height: '1',
+    fg: theme.title.fg,
+    content: headerText,
+    tags: true
+  })
+  
+  this.screen.append(header)
   
   this.screen.on('resize', function() {
     for (var i = 0; i < self.renderList.length; i++) {
@@ -36,10 +49,12 @@ function Screen(theme) {
   
   function draw() {
     if (self.renderList.length === 0) return
+    var updatedHeader = headerText
     for (var i = 0; i < self.renderList.length; i++) {
       var item = self.renderList[i]
       item.render()
     }
+    header.content = updatedHeader
     self.screen.render()
   }
 }

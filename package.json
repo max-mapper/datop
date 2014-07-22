@@ -1,14 +1,11 @@
 {
   "name": "datop",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "bin": {
     "datop": "cli.js"
   },
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "description": "cli dashboard for dat",
+  "description": "top for dat - cli performance dashboard",
   "author": "max ogden",
   "license": "BSD",
   "dependencies": {

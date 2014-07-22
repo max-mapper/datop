@@ -43,16 +43,21 @@ module.exports.draw = function(chart, position) {
     delete chart.values[position - dataPointsToKeep]
   }
   
-  // do first pass to determine min/max
   chart.min = 0
   chart.max = 0
+  chart.average = 0
+  
+  // do first pass to determine min/max
   for (var i = 0; i < chart.width; i++) {
     var rawval = chart.values[chart.values.length - i]
     if (rawval > 0) {
+      chart.average += rawval
       if (rawval < chart.min) chart.min = rawval
       if (rawval > chart.max) chart.max = rawval
     }
   }
+  
+  chart.average = chart.average / chart.width
 
   for (var pos in chart.values) {
     var p = parseInt(pos, 10) + (chart.width - chart.values.length)
@@ -69,8 +74,9 @@ module.exports.draw = function(chart, position) {
 
   // Add percentage to top right of the chart by splicing it into the braille data
   var textOutput = c.frame().split("\n")
-  var percent = '   ' + chart.value
-  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 10) + '' + prettybytes(chart.max) + ''
+  
+  var msg = "avg: " + prettybytes(chart.average) + ', max: ' + prettybytes(chart.max)
+  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - msg.length) + msg
 
   return textOutput.join("\n")
   
@@ -81,4 +87,9 @@ module.exports.draw = function(chart, position) {
 
 function scale( x, fromLow, fromHigh, toLow, toHigh ) {
   return ( x - fromLow ) * ( toHigh - toLow ) / ( fromHigh - fromLow ) + toLow
+}
+
+function stringRepeat(string, num) {
+  if (num < 0) return ''
+  return new Array(num + 1).join(string)
 }
