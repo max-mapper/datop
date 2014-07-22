@@ -62,8 +62,8 @@ Screen.prototype.createBox = function(opts) {
   return box
 }
 
-Screen.prototype.createChart = function() {
-  var box = this.createBox()
+Screen.prototype.createChart = function(opts) {
+  var box = this.createBox(opts)
   var chart = dataChart.create(box)
   var position = 0
   
@@ -79,6 +79,7 @@ Screen.prototype.createChart = function() {
   )
   
   stream.chart = chart
+  stream.box = box
   
   stream.render = function() {
     position++

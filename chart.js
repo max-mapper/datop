@@ -62,7 +62,7 @@ module.exports.draw = function(chart, position) {
   // Add percentage to top right of the chart by splicing it into the braille data
   var textOutput = c.frame().split("\n")
   var percent = '   ' + chart.value
-  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 10) + '{black-fg}' + prettybytes(chart.max) + '{/black-fg}'
+  textOutput[0] = textOutput[0].slice(0, textOutput[0].length - 10) + '' + prettybytes(chart.max) + ''
 
   return textOutput.join("\n")
   
