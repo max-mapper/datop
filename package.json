@@ -1,6 +1,6 @@
 {
   "name": "datop",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "bin": {
     "datop": "cli.js"
   },
