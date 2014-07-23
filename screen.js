@@ -12,11 +12,7 @@ function Screen(host, theme) {
   process.program = program
   
   process.on('SIGINT', function() {
-    program.clear()
-    program.disableMouse()
-    program.showCursor()
-    program.normalBuffer()
-    process.exit(0)
+    self.kill()
   })
   
   this.program = program
@@ -57,6 +53,14 @@ function Screen(host, theme) {
     header.content = updatedHeader
     self.screen.render()
   }
+}
+
+Screen.prototype.kill = function() {
+  this.program.clear()
+  this.program.disableMouse()
+  this.program.showCursor()
+  this.program.normalBuffer()
+  this.process.exit(0)
 }
 
 Screen.prototype.createBox = function(opts) {

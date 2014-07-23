@@ -44,7 +44,7 @@ module.exports.draw = function(chart, position) {
   }
   
   chart.min = 0
-  chart.max = 0
+  chart.max = 1000 // 1kb
   chart.average = 0
   
   // do first pass to determine min/max
