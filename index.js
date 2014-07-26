@@ -17,37 +17,23 @@ module.exports = function(host, theme) {
   req.on('response', function() {
     var screen = createScreen(host, theme)
     
-    var httpRead = screen.createChart({
+    var read = screen.createChart({
       height: "48%",
-      width: "50%",
-      title: "HTTP Read"
+      width: "100%",
+      title: "Read"
     })
-    var httpWritten = screen.createChart({
+    
+    var written = screen.createChart({
       height: "49%",
-      width: "50%",
+      width: "100%",
       top: '52%',
-      title: "HTTP Written"
-    })
-    var levelRead = screen.createChart({
-      height: "48%",
-      left: "51%",
-      width: '49%',
-      title: "Level Read"
-    })
-    var levelWritten = screen.createChart({
-      height: "49%",
-      width: '49%',
-      left: '51%',
-      top: '52%',
-      title: "Level Written"
+      title: "Written"
     })
     
     var parser = ldj.parse()
     var filter = through.obj(function(obj, enc, next) {
-      httpWritten.write(obj.http.written)
-      httpRead.write(obj.http.read)
-      levelWritten.write(obj.level.written)
-      levelRead.write(obj.level.read)
+      written.write(obj.http.written + obj.level.written + obj.blobs.written)
+      read.write(obj.http.read + obj.level.read + obj.blobs.read)
       next()
     })
     req.pipe(parser).pipe(filter)

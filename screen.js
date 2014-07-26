@@ -41,7 +41,7 @@ function Screen(host, theme) {
   this.theme = theme
   this.renderList = []
   
-  setInterval(draw, 100)
+  setInterval(draw, 1000)
   
   function draw() {
     if (self.renderList.length === 0) return
