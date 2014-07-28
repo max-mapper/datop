@@ -31,7 +31,15 @@ module.exports = function(host, theme) {
     })
     
     var parser = ldj.parse()
+    
+    // number of initial stats to skip (heisenberg - requesting stats causes stats to change)
+    var skip = 2
+    
     var filter = through.obj(function(obj, enc, next) {
+      if (skip !== 0) {
+        skip--
+        return next()
+      }
       written.write(obj.http.written + obj.level.written + obj.blobs.written)
       read.write(obj.http.read + obj.level.read + obj.blobs.read)
       next()

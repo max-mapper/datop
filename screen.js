@@ -17,16 +17,17 @@ function Screen(host, theme) {
   })
   
   this.program = program
+  this.host = host
   this.screen = blessed.screen()
   
-  var headerText = ' {bold}datop{/bold} - ' + host
+  this.headerText = ' {bold}datop{/bold} - ' + host
   var header = blessed.text({
     top: 'top',
     left: 'left',
-    width: headerText.length,
+    width: this.headerText.length + 10,
     height: '1',
     fg: theme.title.fg,
-    content: headerText,
+    content: this.headerText,
     tags: true
   })
   
@@ -35,7 +36,10 @@ function Screen(host, theme) {
   this.screen.on('resize', function() {
     for (var i = 0; i < self.renderList.length; i++) {
       var item = self.renderList[i]
-      if (item.chart) dataChart.resize(item.chart, item.box)
+      if (item.chart) {
+        dataChart.resize(item.chart, item.box)
+        updateHeader(item.chart)
+      }
     }
   })
   
@@ -46,13 +50,20 @@ function Screen(host, theme) {
   
   function draw() {
     if (self.renderList.length === 0) return
-    var updatedHeader = headerText
+    var updatedHeader = self.headerText
     for (var i = 0; i < self.renderList.length; i++) {
       var item = self.renderList[i]
       item.render()
+      if (item.chart) updateHeader(item.chart)
     }
     header.content = updatedHeader
     self.screen.render()
+  }
+  
+  function updateHeader(chart) {
+    var min = ~~(chart.width / 60)
+    var sec = chart.width % 60
+    self.headerText = ' {bold}datop{/bold} - ' + self.host + ' - showing ' + min + 'm' + sec + 's'
   }
 }
 
