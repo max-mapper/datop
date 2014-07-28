@@ -44,26 +44,28 @@ module.exports.draw = function(chart, position) {
   }
   
   chart.min = 0
-  chart.max = 1000 // 1kb
+  chart.max = 0 // 1kb
   chart.average = 0
   
+  var avgCount = 0
   // do first pass to determine min/max
   for (var i = 0; i < chart.width; i++) {
     var rawval = chart.values[chart.values.length - i]
     if (rawval > 0) {
+      avgCount++
       chart.average += rawval
       if (rawval < chart.min) chart.min = rawval
       if (rawval > chart.max) chart.max = rawval
     }
   }
   
-  chart.average = chart.average / chart.width
+  chart.average = ~~(chart.average / avgCount)
 
   for (var pos in chart.values) {
     var p = parseInt(pos, 10) + (chart.width - chart.values.length)
     var pval = computeValue(chart.values[pos])
     
-    if (p > 0 && pval > 0) {
+    if (p > 0 && chart.values[pos] > 0) {
       c.set(p, chart.height - 1)
     }
     
@@ -75,13 +77,16 @@ module.exports.draw = function(chart, position) {
   // Add percentage to top right of the chart by splicing it into the braille data
   var textOutput = c.frame().split("\n")
   
-  var msg = "avg: " + prettybytes(chart.average) + ', max: ' + prettybytes(chart.max)
+  var currentVal = prettybytes(chart.values[chart.values.length - 1])
+  var msg = "current: " + currentVal + ", avg: " + prettybytes(chart.average) + ', max: ' + prettybytes(chart.max)
   textOutput[0] = textOutput[0].slice(0, textOutput[0].length - msg.length) + msg
 
   return textOutput.join("\n")
   
   function computeValue(input) {
-    return ~~scale(input, chart.min, chart.max, 0, chart.height)
+    var max = chart.max
+    if (max < 1000) max = 1000
+    return ~~scale(input, chart.min, max, 0, chart.height)
   }
 }
 

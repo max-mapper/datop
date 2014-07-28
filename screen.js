@@ -8,8 +8,9 @@ module.exports = Screen
 function Screen(host, theme) {
   if (!(this instanceof Screen)) return new Screen(host, theme)
   var self = this
-  var program = blessed.program()
-  process.program = program
+  var opts = {}
+  if (process.env.DEBUG) opts.log = './datop.log'
+  var program = blessed.program(opts)
   
   process.on('SIGINT', function() {
     self.kill()
@@ -90,6 +91,7 @@ Screen.prototype.createBox = function(opts) {
 }
 
 Screen.prototype.createChart = function(opts) {
+  var self = this
   var box = this.createBox(opts)
   var chart = dataChart.create(box)
   var position = 0
@@ -109,6 +111,7 @@ Screen.prototype.createChart = function(opts) {
   stream.box = box
   
   stream.render = function() {
+    if (process.env.DEBUG) self.program.log([chart.min, chart.max, chart.average, chart.values[chart.values.length - 1]])
     position++
     box.setContent(dataChart.draw(chart, position))
   }
