@@ -12,3 +12,5 @@ datop http://mydat
 ```
 
 if you just run `datop` it will try and connect to `localhost:6461` (the default dat port)
+
+idea/design inspired by [vtop](https://www.npmjs.org/package/vtop)
